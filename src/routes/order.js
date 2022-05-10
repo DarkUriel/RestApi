@@ -1,17 +1,18 @@
 const express = require('express');
 const req = require('express/lib/request');
 const res = require('express/lib/response');
+const { resume } = require('../database');
 const router = express.Router();
 const mysqlConnection = require('../database');
 
 
 //Metodo GET
 router.get('/Order/', (req, res) => {
-    mysqlConnection.query('SELECT * FROM Cliente', (err, rows, fields) => {
+    mysqlConnection.query('SELECT * FROM Venta', (err, rows, fields) => {
         if (!err) {
             res.json(rows);
         } else {
-            console.log({ Status: "Not Found" });
+            res.json({ Status: "Empty" });
         }
     });
 });
@@ -20,7 +21,7 @@ router.get('/Order/', (req, res) => {
 router.get('/Order/:id', (req, res) => {
     const { id } = req.params;
     console.log(id);
-    mysqlConnection.query('SELECT * FROM Cliente WHERE Estado = ?', [id], (err, rows, fields) => {
+    mysqlConnection.query('SELECT * FROM Venta WHERE Id_Venta = ?', [id], (err, rows, fields) => {
         if (!err) {
             if (rows != 0) {
                 res.json(rows[0]);
