@@ -31,5 +31,19 @@ router.get('/SaleDetail/:id', (req, res) => {
     });
 });
 
+router.post('/SaleDetail/', (req, res) => {
+    const { Descripcion, Cantidad, PrecioUnitario, Descuento, Id_Venta, Id_Menu } = req.body;
+    const query = "INSERT INTO VentaDetalle (Descripcion, Cantidad, PrecioUnitario, Descuento, Id_Venta, Id_Menu) VALUES (?, ?, ?, ?, ?, ?)";
+    mysqlConnection.query(query, [Descripcion, Cantidad, PrecioUnitario, Descuento, Id_Venta, Id_Menu], (err, rows, fields) => {
+        if (!err) {
+            //res.json({ Status: "Ok" });
+            mysqlConnection.query('SELECT Id_Temporal FROM tmp ORDER BY Id_Temporal DESC LIMIT 1', (err, rows, fields) => {
+                res.json(rows[0]);
+            });
+        } else {
+            res.json({ Status: "Error" });
+        }
+    });
+});
 
 module.exports = router;
