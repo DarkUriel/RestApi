@@ -39,10 +39,10 @@ router.post('/Login/', (req, res) => {
     Clave = pass;
     const query = 'SELECT * FROM Login WHERE Usuario = ? AND Clave = ? AND Estado = 1';
     mysqlConnection.query(query, [Usuario, Clave], (err, rows, fields) => {
-        if (!err) {
-            res.json({ Status: "Ok" });
+        if (rows != 0) {
+            res.json({ Status: "Found" });
         } else {
-            console.log({ Status: "Not Found" });
+            res.json({ Status: "Not Found" });
         }
     });
 });
