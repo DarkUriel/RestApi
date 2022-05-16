@@ -11,6 +11,7 @@ app.use(require('./routes/customer'));
 app.use(require('./routes/sale'));
 app.use(require('./routes/saledetail'));
 app.use(require('./routes/tmp'));
+app.use(require('./routes/login'));
 
 app.listen(app.get('port'), () => {
     console.log('Server on port ', app.get('port'));

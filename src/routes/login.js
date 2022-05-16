@@ -1,14 +1,13 @@
 const express = require('express');
 const req = require('express/lib/request');
 const res = require('express/lib/response');
-const { resume } = require('../database');
 const router = express.Router();
 const mysqlConnection = require('../database');
+var md5 = require('md5');
 
-//Deshabiliitado
 //Metodo GET
-router.get('/Order/', (req, res) => {
-    mysqlConnection.query('SELECT * FROM Venta', (err, rows, fields) => {
+router.get('/Login/', (req, res) => {
+    mysqlConnection.query('SELECT * FROM Login', (err, rows, fields) => {
         if (!err) {
             res.json(rows);
         } else {
@@ -18,10 +17,10 @@ router.get('/Order/', (req, res) => {
 });
 
 //Metodo Get con Id
-router.get('/Order/:id', (req, res) => {
+router.get('/Login/:id', (req, res) => {
     const { id } = req.params;
     console.log(id);
-    mysqlConnection.query('SELECT * FROM Venta WHERE Id_Venta = ?', [id], (err, rows, fields) => {
+    mysqlConnection.query('SELECT * FROM Login WHERE Id_Login = ?', [id], (err, rows, fields) => {
         if (!err) {
             if (rows != 0) {
                 res.json(rows[0]);
@@ -34,10 +33,12 @@ router.get('/Order/:id', (req, res) => {
     });
 });
 
-router.post('/Order/', (req, res) => {
-    const { Id_Login, Estado, Usuario, Clave } = req.body;
-    const query = '';
-    mysqlConnection.query(query, [Id_Login, Estado, Usuario, Clave], (err, rows, fields) => {
+router.post('/Login/', (req, res) => {
+    var { Usuario, Clave } = req.body;
+    const pass = md5(Clave);
+    Clave = pass;
+    const query = 'SELECT * FROM Login WHERE Usuario = ? AND Clave = ? AND Estado = 1';
+    mysqlConnection.query(query, [Usuario, Clave], (err, rows, fields) => {
         if (!err) {
             res.json({ Status: "Ok" });
         } else {
